@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Status{
+  ACCEPTED
+  PENDING
+  REJECTED
+}
+
+model User {
+  id         Int         @id @default(autoincrement())
+  email      String      @unique
+  username   String      @unique
+  password   String
+  contests   Contest[]   @relation("UserContests")
+  submissions Submission[]
+}
+
+model Contest {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  startTime   DateTime
+  endTime     DateTime
+  questions   Question[]
+  participants User[]    @relation("UserContests")
+  submissions  Submission[]
+}
+
+model Question {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  difficulty  String
+  contestId   Int
+  contest     Contest    @relation(fields: [contestId], references: [id])
+  testCases   TestCase[]
+  solutions   Solution[]
+  submissions Submission[]  
+}
+
+model TestCase {
+  id          Int        @id @default(autoincrement())
+  input       String
+  expectedOutput String
+  questionId  Int
+  question    Question   @relation(fields: [questionId], references: [id])
+}
+
+model Solution {
+  id          Int        @id @default(autoincrement())
+  code        String
+  language    String
+  questionId  Int
+  question    Question   @relation(fields: [questionId], references: [id])
+  submissions Submission[]  
+}
+
+model Submission {
+  id                  Int              @id @default(autoincrement())
+  userId              Int
+  author              User             @relation(fields: [userId], references: [id])
+  contestId           Int
+  contest             Contest          @relation(fields: [contestId], references: [id])
+  questionId          Int
+  code                String
+  status              Status
+  createdAt           DateTime         @default(now())
+  answeredQuestion    Question          @relation(fields: [questionId], references: [id])
+  solutionId          Int
+  solution            Solution          @relation(fields: [solutionId], references: [id])
+}
+
