@@ -8,9 +8,11 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { useSession } from "next-auth/react";
  // Adjust the import path for your icons
 
 export default function Register() {
+  const { data: session } = useSession();
   const [isLoginCard, setIsLoginCard] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +21,7 @@ export default function Register() {
   const handleLogin = async (event) => {
     event.preventDefault();
     const result = await signIn("credentials", {
-      redirect: false,
+   
       email,
       password,
     });
@@ -49,6 +51,9 @@ export default function Register() {
     className="w-1/2"
   >
     Login
+ 
+
+    
   </Button>
   <Button
     variant={!isLoginCard ? "default" : "outline"}

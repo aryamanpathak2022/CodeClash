@@ -50,14 +50,15 @@ export async function Home() {
         </a>
      
       <div className="flex items-center gap-4">
-      {!session.user.name ? (
+      {!session ? (
           <>
             <Link
               href="/auth/signin"
               className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50 disabled:pointer-events-none"
               prefetch={false}
             >
-              Login
+              Login  
+ 
             </Link>
             <Link
               href="/auth/signup"
@@ -68,8 +69,8 @@ export async function Home() {
             </Link>
           </>
         ) : (
-          <span className="text-sm font-medium text-primary-foreground">
-            {JSON.stringify(session.user.name)}
+          <span >
+            {JSON.stringify(session.user.email)}
           </span>
         )}
       </div>

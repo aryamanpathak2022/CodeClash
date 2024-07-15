@@ -15,7 +15,7 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         // Add your own authentication logic here
-        const user = await prisma.User.findUnique({
+        const user = await prisma.user.findUnique({
           where: { email: credentials.email }
         });
 
@@ -34,18 +34,8 @@ const handler = NextAuth({
   session: {
     jwt: true
   },
-  callbacks: {
-    async jwt(token, user) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-    async session(session, token) {
-      session.user.id = token.id;
-      return session;
-    }
-  }
+   
+  
 });
 
 
