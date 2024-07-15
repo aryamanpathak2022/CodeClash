@@ -2,14 +2,36 @@
 "use client"
 
 import { useState } from "react";
-import Link from "next/link"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+ // Adjust the import path for your icons
 
-export default function Component() {
-  const [isLoginCard, setIsLoginCard] = useState(true)
+export default function Register() {
+  const [isLoginCard, setIsLoginCard] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (result.error) {
+      setError(result.error);
+    } else {
+      // Redirect to homepage or other protected page
+      window.location.href = "/";
+    }
+  };
+
   return (
     <div className="flex min-h-[100dvh] flex-col bg-background">
       <header className="flex items-center justify-between px-6 py-4 border-b">
@@ -20,14 +42,23 @@ export default function Component() {
       </header>
       <div className="flex-1 flex items-center justify-center p-6">
         <Card className="w-full max-w-md">
-          <div className="flex justify-center gap-4 mb-6">
-            <Button variant={isLoginCard ? "default" : "outline"} onClick={() => setIsLoginCard(true)}>
-              Login
-            </Button>
-            <Button variant={!isLoginCard ? "default" : "outline"} onClick={() => setIsLoginCard(false)}>
-              Signup
-            </Button>
-          </div>
+        <div className="flex justify-center gap-2 mb-6">
+  <Button
+    variant={isLoginCard ? "default" : "outline"}
+    onClick={() => setIsLoginCard(true)}
+    className="w-1/2"
+  >
+    Login
+  </Button>
+  <Button
+    variant={!isLoginCard ? "default" : "outline"}
+    onClick={() => setIsLoginCard(false)}
+    className="w-1/2"
+  >
+    Signup
+  </Button>
+</div>
+
           {isLoginCard ? (
             <>
               <CardHeader className="space-y-1">
@@ -53,18 +84,36 @@ export default function Component() {
                     <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
                   </div>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="m@example.com" />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" />
-                </div>
+                {error && <p className="text-red-500">{error}</p>}
+                <form onSubmit={handleLogin} className="grid gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <CardFooter>
+                    <Button type="submit" className="w-full">
+                      Login
+                    </Button>
+                  </CardFooter>
+                </form>
               </CardContent>
-              <CardFooter>
-                <Button className="w-full">Login</Button>
-              </CardFooter>
             </>
           ) : (
             <>
@@ -112,7 +161,7 @@ export default function Component() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 function CodeIcon(props) {

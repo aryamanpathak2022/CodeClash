@@ -23,34 +23,57 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+
 import Link from "next/link"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import { getServerSession } from "next-auth"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 
-export function Home() {
+async function getUser() {
+  const session = await getServerSession();
+  console.log(session.user);
+  console.log("ayaman");
+  return session;
+}
+
+export async function Home() {
+  const session = await getUser();
+  // print session.user in console
+
   return (
     (<div className="flex flex-col min-h-dvh">
-      <header
-        className="flex items-center justify-between px-4 py-3 bg-background shadow md:px-6">
-        <Link href="#" className="flex items-center gap-2" prefetch={false}>
+     <header className="flex items-center justify-between px-4 py-3 bg-background shadow md:px-6">
+      
+        <a className="flex items-center gap-2">
           <CodeIcon className="w-6 h-6" />
           <span className="text-lg font-bold">CodeClash</span>
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link
-            href="#"
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50 disabled:pointer-events-none"
-            prefetch={false}>
-            Login
-          </Link>
-          <Link
-            href="#"
-            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-accent-foreground bg-accent rounded-md shadow-sm hover:bg-accent/90 focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50 disabled:pointer-events-none"
-            prefetch={false}>
-            Sign Up
-          </Link>
-        </div>
-      </header>
+        </a>
+     
+      <div className="flex items-center gap-4">
+      {!session.user.name ? (
+          <>
+            <Link
+              href="/auth/signin"
+              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-md shadow-sm hover:bg-primary/90 focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50 disabled:pointer-events-none"
+              prefetch={false}
+            >
+              Login
+            </Link>
+            <Link
+              href="/auth/signup"
+              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-accent-foreground bg-accent rounded-md shadow-sm hover:bg-accent/90 focus:outline-none focus:ring-1 focus:ring-ring disabled:opacity-50 disabled:pointer-events-none"
+              prefetch={false}
+            >
+              Sign Up
+            </Link>
+          </>
+        ) : (
+          <span className="text-sm font-medium text-primary-foreground">
+            {JSON.stringify(session.user.name)}
+          </span>
+        )}
+      </div>
+    </header>
       <main className="flex-1">
         <section
           className=" grid grid-cols-1 gap-8 px-4 py-12 md:grid-cols-2 md:gap-12 md:px-6 lg:py-16">
