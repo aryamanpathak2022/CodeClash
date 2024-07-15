@@ -1,5 +1,5 @@
 
-import Register from "@/components/component/register";
+import Register from "../../../components/component/register";
 
 export default function app() {
   return (

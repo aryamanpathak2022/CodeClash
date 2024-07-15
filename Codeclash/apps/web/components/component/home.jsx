@@ -25,9 +25,9 @@ To read more about using these font, please visit the Next.js documentation:
 **/
 
 import Link from "next/link"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../ui/card"
 import { getServerSession } from "next-auth"
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../ui/table"
 
 async function getUser() {
   const session = await getServerSession();

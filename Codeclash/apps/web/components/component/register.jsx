@@ -4,10 +4,10 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "../ui/card";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
  // Adjust the import path for your icons
 
 export default function Register() {
